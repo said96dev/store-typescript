@@ -2376,7 +2376,6 @@ SingleProduct.tsx
 ```tsx
 import { SelectProductColor, SelectProductAmount } from '@/components'
 import { Mode } from '@/components/SelectProductAmount'
-
 ;<SelectProductAmount
   mode={Mode.SingleProduct}
   amount={amount}
