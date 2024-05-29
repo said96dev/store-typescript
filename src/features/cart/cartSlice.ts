@@ -22,7 +22,7 @@ const cartSlice = createSlice({
     reducers: {
         addItem: (state, action: PayloadAction<CartItem>) => {
             const newCartItem = action.payload;
-            const item = state.cartItems.find(item => item.productID === newCartItem.productID)
+            const item = state.cartItems.find(item => item.cartID === newCartItem.cartID)
             if (item) {
                 item.amount += newCartItem.amount
             }
@@ -53,7 +53,7 @@ const cartSlice = createSlice({
             state.cartTotal += Number(cartItem.price) * (amount - cartItem.amount)
             cartItem.amount = amount
             cartSlice.caseReducers.calculateTotals(state)
-            toast('Amount updated')
+            toast.success('Amount updated')
         },
         removeItem: (state, action: PayloadAction<string>) => {
             const cartID = action.payload
@@ -64,7 +64,7 @@ const cartSlice = createSlice({
             state.numItemsInCart -= cartItem.amount
             state.cartTotal -= +cartItem.price * cartItem.amount
             cartSlice.caseReducers.calculateTotals(state)
-            toast.success('Item removed from cart')
+            toast.warning('Item removed from cart')
         },
         calculateTotals: (state) => {
             state.tax = 0.1 * state.cartTotal

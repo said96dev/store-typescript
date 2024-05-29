@@ -1,16 +1,24 @@
-import { Link, useNavigate } from "react-router-dom"
-import { Button } from "./ui/button"
-import { useState } from "react"
+import { Link, useNavigate } from 'react-router-dom'
+import { Button } from './ui/button'
+import { useAppDispatch, useAppSelector } from '@/Hooks/hooks'
 
+import { logoutUser } from '../features/user/userSlice'
+import { clearCart } from '../features/cart/cartSlice'
+import { toast } from 'sonner'
 
 const Header = () => {
+    const dispatch = useAppDispatch()
     const navigate = useNavigate()
-    const [user, setUser] = useState<null | { username: string }>({ username: "demo User" })
+
+    const user = useAppSelector((state) => state.userState.user)
 
     const handleLogout = () => {
-        setUser(null)
-        navigate("/login")
+        dispatch(clearCart())
+        dispatch(logoutUser())
+        toast('Logged out')
+        navigate('/')
     }
+
     return (
         <header>
             <div className="align-element flex justify-center sm:justify-end py-2">

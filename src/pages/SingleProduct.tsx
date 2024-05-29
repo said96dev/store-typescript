@@ -1,6 +1,7 @@
 import { useLoaderData } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import {
+    CartItem,
     customFetch,
     formatAsDollars,
     type SingleProductResponse,
@@ -13,6 +14,8 @@ import { type LoaderFunction } from 'react-router-dom'
 import { SelectProductAmount, SelectProductColor } from '@/components'
 import { Mode } from '@/components/SelectProductAmount'
 import { toast } from 'sonner'
+import { useAppDispatch } from '@/Hooks/hooks'
+import { addItem } from '@/features/cart/cartSlice'
 
 
 export const loader: LoaderFunction = async ({ params }) => {
@@ -21,14 +24,27 @@ export const loader: LoaderFunction = async ({ params }) => {
     return { ...response.data }
 }
 
+
 const SinglePorduct = () => {
+    const dispatch = useAppDispatch()
     const { data: product } = useLoaderData() as SingleProductResponse
     const { image, title, price, description, colors, company } =
         product.attributes
     const dollarsAmount = formatAsDollars(price)
     const [productColor, setProductColor] = useState(colors[0])
     const [amount, setAmount] = useState(1)
+    const cartProduct: CartItem = {
+        cartID: product.id + productColor,
+        productID: product.id,
+        image,
+        title,
+        price,
+        amount,
+        productColor,
+        company,
+    }
     const addToCart = () => {
+        dispatch(addItem(cartProduct))
         toast.success('Item added to cart')
 
     }
